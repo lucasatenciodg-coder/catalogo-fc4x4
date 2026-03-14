@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FC4X4 — Carpas de Techo</title>
+  <meta name="description" content="Carpas de techo FC4X4 para overlanding y expedición.">
+  <style>
+    :root {
+      --color-acento: #f5d800;
+      --color-acento-texto: #1a1a00;
+      --color-fondo: #0f0f0f;
+      --color-fondo-card: #161616;
+      --color-fondo-nav: rgba(10,10,10,0.96);
+      --color-texto: #ffffff;
+      --color-texto-sec: #888888;
+      --color-texto-muted: #555555;
+      --color-borde: #2a2a2a;
+      --color-borde-light: #1a1a1a;
+      --color-perfil-bg: #141a08;
+      --color-perfil-borde: #7a9a30;
+      --color-perfil-texto: #7a9a50;
+      --color-wp: #25D366;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--color-fondo); color: var(--color-texto); max-width: 480px; margin: 0 auto; min-height: 100vh; }
+    .nav { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 100; background: var(--color-fondo-nav); border-bottom: 0.5px solid var(--color-borde); display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; backdrop-filter: blur(10px); }
+    .nb { padding: 11px 6px 9px; font-size: 10px; font-weight: 500; color: var(--color-texto-muted); background: transparent; border: none; cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; display: flex; flex-direction: column; align-items: center; gap: 3px; font-family: inherit; text-decoration: none; }
+    .nb.on { color: var(--color-acento); border-bottom-color: var(--color-acento); }
+    .nb svg { width: 18px; height: 18px; }
+    .content { padding-top: 52px; }
+    .eyebrow { font-size: 10px; font-weight: 600; color: var(--color-acento); letter-spacing: .18em; margin-bottom: 6px; }
+    .hero { position: relative; min-height: 340px; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; }
+    .hero-media { position: absolute; inset: 0; background: #141408; }
+    .hero-media img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--color-fondo) 0%, transparent 60%); }
+    .hero-overlay-top { position: absolute; top: 0; left: 0; right: 0; height: 30%; background: linear-gradient(to bottom, rgba(10,10,10,.6) 0%, transparent 100%); }
+    .hero-content { position: relative; z-index: 2; padding: 1.5rem 1.25rem; }
+    .hero-content h1 { font-size: 28px; font-weight: 600; color: #fff; line-height: 1.1; margin-bottom: 8px; }
+    .hero-content p { font-size: 14px; color: #aaa; line-height: 1.5; }
+    .sec { padding: 1.5rem 1.25rem; border-bottom: 0.5px solid var(--color-borde-light); }
+    .sec-title { font-size: 18px; font-weight: 600; color: var(--color-texto); margin-bottom: 12px; line-height: 1.2; }
+    .sec-body { font-size: 13px; color: var(--color-texto-sec); line-height: 1.6; }
+    .pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .pill { background: var(--color-fondo-card); border-radius: 10px; padding: 10px 12px; border: 0.5px solid var(--color-borde); }
+    .pill-t { font-size: 12px; font-weight: 500; color: #ccc; margin-bottom: 2px; }
+    .pill-s { font-size: 11px; color: var(--color-texto-muted); }
+    .edu-list { display: flex; flex-direction: column; gap: 8px; }
+    .edu-i { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; background: var(--color-fondo-card); border-radius: 10px; border-left: 2px solid var(--color-acento); }
+    .edu-t { font-size: 12px; font-weight: 500; color: #ddd; }
+    .edu-s { font-size: 11px; color: #666; margin-top: 2px; }
+    .comp { margin-top: 12px; }
+    .comp-row { display: grid; grid-template-columns: 82px 1fr 1fr 1fr; gap: 4px; padding: 8px 0; border-bottom: 0.5px solid var(--color-borde-light); align-items: center; }
+    .comp-row.hdr { padding-bottom: 10px; }
+    .comp-row:last-child { border: none; }
+    .cl { font-size: 11px; color: var(--color-texto-muted); }
+    .cv { font-size: 12px; color: #999; text-align: center; }
+    .cv.hi { color: var(--color-acento); font-weight: 600; }
+    .ch { font-size: 11px; font-weight: 600; color: #777; text-align: center; }
+    .ch.hi { color: var(--color-acento); }
+    .mtabs { display: flex; gap: 6px; margin-bottom: 16px; }
+    .mt { flex: 1; padding: 9px 4px; font-size: 11px; font-weight: 600; border-radius: 8px; border: 0.5px solid var(--color-borde); background: transparent; color: var(--color-texto-muted); cursor: pointer; font-family: inherit; transition: all .15s; text-align: center; }
+    .mt.on { background: var(--color-acento); color: var(--color-acento-texto); border-color: var(--color-acento); }
+    .ficha { display: none !important; }
+    .ficha.on { display: block !important; }
+    .ctrack { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+    .ctrack::-webkit-scrollbar { display: none; }
+    .cslide { flex-shrink: 0; width: 100%; scroll-snap-align: start; }
+    .photo-slide { width: 100%; height: min(100vw, 480px); position: relative; overflow: hidden; background: #161616; display: flex; align-items: center; justify-content: center; }
+    .photo-slide img { width: 100%; height: 100%; object-fit: cover; }
+    .dots { display: flex; justify-content: center; gap: 5px; padding: 8px 0; }
+    .dot { width: 6px; height: 6px; border-radius: 99px; background: #2a2a2a; transition: all .2s; cursor: pointer; border: none; }
+    .dot.on { background: var(--color-acento); width: 18px; }
+    .itrack { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; padding: 0 1.25rem 4px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+    .itrack::-webkit-scrollbar { display: none; }
+    .icard { flex-shrink: 0; width: 220px; scroll-snap-align: start; background: var(--color-fondo-card); border-radius: 14px; border: 0.5px solid var(--color-borde); padding: 14px; }
+    .icard.ac { border-color: var(--color-acento); background: #1a1800; }
+    .icard-icon { font-size: 24px; margin-bottom: 8px; }
+    .icard-num { font-size: 30px; font-weight: 700; color: var(--color-acento); line-height: 1; }
+    .icard-unit { font-size: 13px; color: #888; font-weight: 400; }
+    .icard-title { font-size: 13px; font-weight: 500; color: #ddd; margin: 6px 0 3px; }
+    .icard-desc { font-size: 11px; color: #666; line-height: 1.5; }
+    .sgrid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+    .scard { background: var(--color-fondo-card); border-radius: 8px; padding: 9px 10px; text-align: center; }
+    .slabel { font-size: 10px; color: var(--color-texto-muted); margin-bottom: 3px; }
+    .sval { font-size: 12px; font-weight: 500; color: #ddd; }
+    .sval.ac { color: var(--color-acento); }
+    .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+    .tag { font-size: 11px; color: #777; background: var(--color-fondo-card); border-radius: 99px; padding: 5px 10px; border: 0.5px solid var(--color-borde); }
+    .pcard { background: var(--color-perfil-bg); border-radius: 10px; padding: 10px 14px; border-left: 2px solid var(--color-perfil-borde); margin-bottom: 6px; }
+    .ptitle { font-size: 10px; font-weight: 600; color: #8aaa50; letter-spacing: .08em; margin-bottom: 4px; }
+    .ptext { font-size: 12px; color: var(--color-perfil-texto); line-height: 1.5; }
+    .ficha-badge { display: inline-block; font-size: 10px; font-weight: 600; background: #2a2600; color: var(--color-acento); padding: 3px 9px; border-radius: 99px; margin-bottom: 6px; }
+    .ficha-nombre { font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 3px; }
+    .ficha-sub { font-size: 12px; color: #666; margin-bottom: 12px; }
+    .cta { padding: 1.75rem 1.25rem 3rem; }
+    .cta-title { font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+    .cta-sub { font-size: 13px; color: #666; margin-bottom: 1.5rem; line-height: 1.5; }
+    .btn-wp { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px; background: var(--color-wp); color: #fff; font-size: 15px; font-weight: 600; border-radius: 14px; border: none; cursor: pointer; font-family: inherit; margin-bottom: 10px; text-decoration: none; }
+    .btn-web { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 13px; background: transparent; color: #888; font-size: 13px; border-radius: 14px; border: 0.5px solid var(--color-borde); cursor: pointer; font-family: inherit; text-decoration: none; }
+    .mb12 { margin-bottom: 12px; }
+    .mb14 { margin-bottom: 14px; }
+    .px { padding: 0 1.25rem; }
+    .mb8 { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <button class="nb on" onclick="go('s-hero')">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M3 10L10 3l7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 8.5V16a1 1 0 001 1h3v-4h2v4h3a1 1 0 001-1V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    Inicio
+  </button>
+  <button class="nb" onclick="go('s-comp')">
+    <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="5" width="6" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="5" width="6" height="10" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+    Comparar
+  </button>
+  <button class="nb" onclick="go('s-fichas')">
+    <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="12" width="6" height="5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="12" width="6" height="5" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+    Modelos
+  </button>
+  <a class="nb" href="https://wa.me/542616181916?text=Hola%2C%20vi%20el%20cat%C3%A1logo%20de%20carpas%20y%20quiero%20consultar" onclick="setActive(this)">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M16.5 3.5A8.96 8.96 0 0010 1C5.03 1 1 5.03 1 10c0 1.6.42 3.1 1.15 4.4L1 19l4.72-1.24A9 9 0 1016.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    WhatsApp
+  </a>
+  <a class="nb" href="https://www.instagram.com/fc4x4/" target="_blank" onclick="setActive(this)">
+    <svg viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="4" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="3.5" stroke="currentColor" stroke-width="1.5"/><circle cx="14.5" cy="5.5" r="1" fill="currentColor"/></svg>
+    Instagram
+  </a>
+</nav>
+
+<div class="content">
+
+<section id="s-hero" class="hero">
+  <div class="hero-media">
+    <img src="hero.jpg" alt="FC4X4 expedición">
+  </div>
+  <div class="hero-overlay-top"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="eyebrow">FC 4X4 · CARPAS DE TECHO</div>
+    <h1>Tu refugio en cualquier lugar</h1>
+    <p>Carpas técnicas para overlanding y expedición. Fabricadas para resistir cualquier terreno.</p>
+  </div>
+</section>
+
+<section id="s-marca" class="sec">
+  <div class="eyebrow">QUIÉNES SOMOS</div>
+  <h2 class="sec-title">Equipamos camionetas para la aventura</h2>
+  <p class="sec-body">Especialistas en modificación y equipamiento 4x4. Bumpers, barras, protecciones, racks y carpas — todo diseñado para el off-road argentino.</p>
+  <div class="pillars">
+    <div class="pill"><div class="pill-t">Fabricación propia</div><div class="pill-s">Hecho en Argentina</div></div>
+    <div class="pill"><div class="pill-t">Compatibilidad</div><div class="pill-s">Para tu modelo exacto</div></div>
+    <div class="pill"><div class="pill-t">Envíos al país</div><div class="pill-s">Minorista y mayorista</div></div>
+    <div class="pill"><div class="pill-t">+114 productos</div><div class="pill-s">Para tu camioneta</div></div>
+  </div>
+</section>
+
+<section id="s-edu" class="sec">
+  <div class="eyebrow">¿POR QUÉ UNA CARPA DE TECHO?</div>
+  <h2 class="sec-title">Campamento en 30 segundos</h2>
+  <div style="margin:0 0 16px;border-radius:12px;overflow:hidden;">
+    <video controls playsinline style="width:100%;display:block;background:#000;border-radius:12px;">
+      <source src="video-carpas.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="edu-list">
+    <div class="edu-i"><div><div class="edu-t">Armado instantáneo</div><div class="edu-s">Sin estacas, sin terreno plano, sin tiempo perdido</div></div></div>
+    <div class="edu-i"><div><div class="edu-t">Elevado y seguro</div><div class="edu-s">Sin humedad, insectos ni animales del suelo</div></div></div>
+    <div class="edu-i"><div><div class="edu-t">Clima extremo</div><div class="edu-s">Materiales técnicos hasta −15°C según el modelo</div></div></div>
+    <div class="edu-i"><div><div class="edu-t">Donde vayas</div><div class="edu-s">Estacionás y ya tenés campamento</div></div></div>
+  </div>
+</section>
+
+<section id="s-comp" class="sec">
+  <div class="eyebrow">COMPARAR MODELOS</div>
+  <h2 class="sec-title">Encontrá tu carpa</h2>
+  <div class="comp">
+    <div class="comp-row hdr"><div class="cl"></div><div class="ch">ANTÁRTIDA</div><div class="ch hi">PATAGONIA</div><div class="ch">AUSTRAL</div></div>
+    <div class="comp-row"><div class="cl">Personas</div><div class="cv">2+1</div><div class="cv hi">2+3</div><div class="cv">2+1</div></div>
+    <div class="comp-row"><div class="cl">Impermeab.</div><div class="cv">3500mm</div><div class="cv hi">5000mm</div><div class="cv">—</div></div>
+    <div class="comp-row"><div class="cl">Temp. mín.</div><div class="cv hi">−15°C</div><div class="cv">—</div><div class="cv">Aislada</div></div>
+    <div class="comp-row"><div class="cl">Apertura</div><div class="cv">Auto</div><div class="cv">Auto</div><div class="cv hi">Pop-Up</div></div>
+    <div class="comp-row"><div class="cl">Colchón</div><div class="cv">40mm</div><div class="cv">40mm</div><div class="cv hi">50mm</div></div>
+    <div class="comp-row"><div class="cl">Perfil</div><div class="cv">Expedición</div><div class="cv hi">Familiar</div><div class="cv">Compacta</div></div>
+  </div>
+</section>
+
+<section id="s-fichas" class="sec">
+  <div class="eyebrow">MODELOS</div>
+  <h2 class="sec-title mb14">Fichas técnicas</h2>
+  <div class="mtabs">
+    <button class="mt on" onclick="tab('f0', this)">ANTÁRTIDA</button>
+    <button class="mt" onclick="tab('f1', this)">PATAGONIA</button>
+    <button class="mt" onclick="tab('f2', this)">AUSTRAL</button>
+  </div>
+<div id="f0" class="ficha on">
+    <div class="mb12">
+      <span class="ficha-badge">EXPEDICIÓN</span><!-- ✏️ -->
+      <div class="ficha-nombre">Antártida</div><!-- ✏️ -->
+      <div class="ficha-sub">Carpa técnica liviana · 2 adultos + 1 niño</div><!-- ✏️ -->
+    </div>
+
+    <!-- 🖼️ CARRUSEL DE FOTOS ANTÁRTIDA
+         Para cada slide: descomentá el <img> y borrá el .photo-ph
+         Nombres sugeridos: antartica-1.jpg, antartica-2.jpg, etc. -->
+    <div class="ctrack" id="pt0" onscroll="udots('pt0','pd0')">
+      <div class="cslide">
+        <div class="photo-slide">
+          <img src="antartica-1.jpg" alt="Vista exterior">
+        </div>
+      </div>
+      <div class="cslide">
+        <div class="photo-slide">
+          <img src="antartica-2.jpg" alt="Interior — colchón 40mm">
+        </div>
+      </div>
+      <div class="cslide">
+        <div class="photo-slide">
+          <img src="antartica-3.jpg" alt="Montada en camioneta">
+        </div>
+      </div>
+      <div class="cslide">
+        <div class="photo-slide">
+          <img src="antartica-4.jpg" alt="En clima extremo">
+        </div>
+      </div>
+    </div>
+    <div class="dots" id="pd0">
+      <button class="dot on" onclick="gs('pt0',0)"></button>
+      <button class="dot" onclick="gs('pt0',1)"></button>
+      <button class="dot" onclick="gs('pt0',2)"></button>
+      <button class="dot" onclick="gs('pt0',3)"></button>
+    </div>
+
+    <!-- 🎬 VIDEO ANTÁRTIDA
+         Reemplazá este bloque con el iframe de YouTube cuando tengas el video:
+         <div class="video-wrap">
+           <iframe width="100%" height="200"
+             src="https://www.youtube.com/embed/TU-ID-VIDEO"
+             frameborder="0" allowfullscreen style="display:block"></iframe>
+         </div>
+    -->
+
+    <!-- CARRUSEL CARACTERÍSTICAS -->
+    <div class="eyebrow px mb8">CARACTERÍSTICAS</div>
+    <div class="itrack" id="it0" onscroll="udots('it0','id0')">
+      <!-- ✏️ CARDS DE CARACTERÍSTICAS — editá número, título y descripción -->
+      <div class="icard ac">
+        <div class="icard-icon">🌡️</div>
+        <div class="icard-num">−15<span class="icard-unit">°C</span></div>
+        <div class="icard-title">Protección al frío</div>
+        <div class="icard-desc">Cobertor térmico 500 SD y techo de 3 pieles para condiciones invernales extremas.</div>
+      </div>
+      <div class="icard">
+        <div class="icard-icon">💧</div>
+        <div class="icard-num">3500<span class="icard-unit">mm</span></div>
+        <div class="icard-title">Impermeabilidad</div>
+        <div class="icard-desc">Poliéster 1680D con recubrimiento PU. Costuras cocidas y termosoldadas.</div>
+      </div>
+      <div class="icard">
+        <div class="icard-icon">⚡</div>
+        <div class="icard-num">30<span class="icard-unit">seg</span></div>
+        <div class="icard-title">Apertura automática</div>
+        <div class="icard-desc">Sistema automático sin herramientas. Abrís, desplegás y listo para dormir.</div>
+      </div>
+      <div class="icard">
+        <div class="icard-icon">🛏️</div>
+        <div class="icard-num">40<span class="icard-unit">mm</span></div>
+        <div class="icard-title">Colchón HD</div>
+        <div class="icard-desc">Alta densidad con funda SUSD desmontable y lavable.</div>
+      </div>
+    </div>
+    <div class="dots" id="id0" style="padding:7px 0 12px">
+      <button class="dot on" onclick="gi('it0',0)"></button>
+      <button class="dot" onclick="gi('it0',1)"></button>
+      <button class="dot" onclick="gi('it0',2)"></button>
+      <button class="dot" onclick="gi('it0',3)"></button>
+    </div>
+
+    <!-- ✏️ SPECS RÁPIDOS -->
+    <div class="sgrid">
+      <div class="scard"><div class="slabel">Medidas</div><div class="sval">215×145cm</div></div>
+      <div class="scard"><div class="slabel">Interior</div><div class="sval">Ripstop 420D</div></div>
+      <div class="scard"><div class="slabel">Filtro UV</div><div class="sval ac">Sí</div></div>
+    </div>
+
+    <!-- ✏️ TAGS -->
+    <div class="tags">
+      <span class="tag">Peso reducido</span>
+      <span class="tag">Techo 3 pieles</span>
+      <span class="tag">LED interior</span>
+      <span class="tag">Mosquiteros</span>
+    </div>
+
+    <!-- ✏️ PERFIL DE USUARIO -->
+    <div class="pcard">
+      <div class="ptitle">ANTÁRTIDA ES PARA VOS SI…</div>
+      <div class="ptext">Hacés expediciones largas, viajás solo o en pareja y necesitás protección extrema al frío.</div>
+    </div>
+  </div>
+
+  <!-- ==================== PATAGONIA ==================== -->
+  
+<div id="f1" class="ficha">
+    <div class="mb12">
+      <span class="ficha-badge">FAMILIAR</span>
+      <div class="ficha-nombre">Patagonia</div>
+      <div class="ficha-sub">Carpa rígida familiar · 2 adultos + hasta 3 niños</div>
+    </div>
+
+    <div class="ctrack" id="pt1" onscroll="udots('pt1','pd1')">
+      <div class="cslide"><div class="photo-slide"><img src="patagonia-1.jpg" alt="Carcasa ABS exterior"></div></div>
+      <div class="cslide"><div class="photo-slide"><img src="patagonia-2.jpg" alt="Interior familiar"></div></div>
+      <div class="cslide"><div class="photo-slide"><img src="patagonia-3.jpg" alt="Montada en camioneta"></div></div>
+      <div class="cslide"><div class="photo-slide"><img src="patagonia-4.jpg" alt="Protección lluvia intensa"></div></div>
+    </div>
+    <div class="dots" id="pd1">
+      <button class="dot on" onclick="gs('pt1',0)"></button>
+      <button class="dot" onclick="gs('pt1',1)"></button>
+      <button class="dot" onclick="gs('pt1',2)"></button>
+      <button class="dot" onclick="gs('pt1',3)"></button>
+    </div>
+
+    <div class="eyebrow px mb8">CARACTERÍSTICAS</div>
+    <div class="itrack" id="it1" onscroll="udots('it1','id1')">
+      <div class="icard ac"><div class="icard-icon">🛡️</div><div class="icard-num">ABS</div><div class="icard-title">Carcasa rígida</div><div class="icard-desc">Protección máxima en transporte. Resistente a golpes y rayones.</div></div>
+      <div class="icard"><div class="icard-icon">💧</div><div class="icard-num">5000<span class="icard-unit">mm</span></div><div class="icard-title">Impermeabilidad total</div><div class="icard-desc">Rainfly Oxford 420D + lona Ripstop. La más impermeable de la línea.</div></div>
+      <div class="icard"><div class="icard-icon">👁️</div><div class="icard-num">360<span class="icard-unit">°</span></div><div class="icard-title">Claraboya + 3 ventanas</div><div class="icard-desc">Vista al exterior. Ventilación completa con mosquiteros en todas las aberturas.</div></div>
+      <div class="icard"><div class="icard-icon">📐</div><div class="icard-num">210<span class="icard-unit">cm</span></div><div class="icard-title">Interior espacioso</div><div class="icard-desc">210×170×110 cm abierta. El más amplio de la línea para toda la familia.</div></div>
+    </div>
+    <div class="dots" id="id1" style="padding:7px 0 12px">
+      <button class="dot on" onclick="gi('it1',0)"></button>
+      <button class="dot" onclick="gi('it1',1)"></button>
+      <button class="dot" onclick="gi('it1',2)"></button>
+      <button class="dot" onclick="gi('it1',3)"></button>
+    </div>
+
+    <div class="sgrid">
+      <div class="scard"><div class="slabel">Cerrada</div><div class="sval">120×185cm</div></div>
+      <div class="scard"><div class="slabel">Colchón</div><div class="sval">40mm HD</div></div>
+      <div class="scard"><div class="slabel">Piso</div><div class="sval ac">Doble piel</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag">Carcasa ABS</span><span class="tag">Claraboya</span><span class="tag">Anti-moho</span><span class="tag">Anti-rayones</span>
+    </div>
+    <div class="pcard">
+      <div class="ptitle">PATAGONIA ES PARA VOS SI…</div>
+      <div class="ptext">Viajás en familia y necesitás el mayor espacio con la protección más robusta contra lluvia y humedad.</div>
+    </div>
+  </div>
+
+  <!-- ==================== AUSTRAL ==================== -->
+  
+<div id="f2" class="ficha">
+    <div class="mb12">
+      <span class="ficha-badge">POP-UP COMPACTA</span>
+      <div class="ficha-nombre">Austral</div>
+      <div class="ficha-sub">Apertura instantánea Pop-Up · 2 adultos + 1 niño</div>
+    </div>
+
+    <div class="ctrack" id="pt2" onscroll="udots('pt2','pd2')">
+      <div class="cslide"><div class="photo-slide"><img src="austral-1.jpg" alt="Vista exterior — perfil bajo"></div></div>
+      <div class="cslide"><div class="photo-slide"><img src="austral-2.jpg" alt="Colchón 50mm"></div></div>
+      <div class="cslide"><div class="photo-slide"><img src="austral-3.jpg" alt="Aerodinámico en ruta"></div></div>
+      <div class="cslide"><div class="photo-slide"><img src="austral-4.jpg" alt="Interior organizado"></div></div>
+    </div>
+    <div class="dots" id="pd2">
+      <button class="dot on" onclick="gs('pt2',0)"></button>
+      <button class="dot" onclick="gs('pt2',1)"></button>
+      <button class="dot" onclick="gs('pt2',2)"></button>
+      <button class="dot" onclick="gs('pt2',3)"></button>
+    </div>
+
+    <div class="eyebrow px mb8">CARACTERÍSTICAS</div>
+    <div class="itrack" id="it2" onscroll="udots('it2','id2')">
+      <div class="icard ac"><div class="icard-icon">⚡</div><div class="icard-num">Pop<span class="icard-unit">-Up</span></div><div class="icard-title">Apertura instantánea</div><div class="icard-desc">Sistema automático de fibra de vidrio. El más rápido de armar de la línea.</div></div>
+      <div class="icard"><div class="icard-icon">📏</div><div class="icard-num">25<span class="icard-unit">cm</span></div><div class="icard-title">Perfil ultra bajo</div><div class="icard-desc">Menor resistencia al viento. Ahorro de combustible y mejor estabilidad en ruta.</div></div>
+      <div class="icard"><div class="icard-icon">🛏️</div><div class="icard-num">50<span class="icard-unit">mm</span></div><div class="icard-title">Colchón más grueso</div><div class="icard-desc">El más cómodo de la línea. Funda desmontable con cierre para lavado.</div></div>
+      <div class="icard"><div class="icard-icon">🌬️</div><div class="icard-num">2×2</div><div class="icard-title">Ventilación cruzada</div><div class="icard-desc">2 ventanas + 2 puertas con mosquiteros. Circulación de aire completa.</div></div>
+    </div>
+    <div class="dots" id="id2" style="padding:7px 0 12px">
+      <button class="dot on" onclick="gi('it2',0)"></button>
+      <button class="dot" onclick="gi('it2',1)"></button>
+      <button class="dot" onclick="gi('it2',2)"></button>
+      <button class="dot" onclick="gi('it2',3)"></button>
+    </div>
+
+    <div class="sgrid">
+      <div class="scard"><div class="slabel">Cerrada</div><div class="sval">210×140cm</div></div>
+      <div class="scard"><div class="slabel">Carcasa</div><div class="sval ac">Fibra vidrio</div></div>
+      <div class="scard"><div class="slabel">Matelassé</div><div class="sval ac">Sí</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag">Pop-Up auto</span><span class="tag">Perfil bajo</span><span class="tag">Red marítima</span><span class="tag">2 percheros</span>
+    </div>
+    <div class="pcard">
+      <div class="ptitle">AUSTRAL ES PARA VOS SI…</div>
+      <div class="ptext">Querés rapidez máxima de armado y viajás seguido en escapadas frecuentes y expediciones.</div>
+    </div>
+  </div>
+
+
+</section>
+
+<section id="s-cta" class="cta">
+  <div class="eyebrow">SIGUIENTE PASO</div>
+  <h2 class="cta-title">¿Cuál es tu camioneta?</h2>
+  <p class="cta-sub">Contanos tu vehículo y te asesoramos sobre cuál modelo se adapta mejor y cómo instalarla.</p>
+  <a class="btn-wp" href="https://wa.me/542616181916?text=Hola%2C%20vi%20el%20cat%C3%A1logo%20de%20carpas%20y%20quiero%20consultar">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.856L.057 23.428a.75.75 0 00.915.915l5.57-1.476A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.7-.498-5.26-1.373l-.374-.217-3.876 1.027 1.028-3.758-.235-.386A9.955 9.955 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+    Consultar por WhatsApp
+  </a>
+  <a class="btn-web" href="https://fc4x4oficial.com.ar" target="_blank">
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 2c0 0-3 3-3 8s3 8 3 8" stroke="currentColor" stroke-width="1.5"/><path d="M10 2c0 0 3 3 3 8s-3 8-3 8" stroke="currentColor" stroke-width="1.5"/><path d="M2 10h16" stroke="currentColor" stroke-width="1.5"/></svg>
+    Ver más productos — fc4x4oficial.com.ar
+  </a>
+</section>
+
+</div>
+
+<script>
+  const navSections = ['s-hero', 's-comp', 's-fichas', 's-cta', null];
+  function go(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => {
+      document.querySelectorAll('.nb').forEach((b, i) => {
+        b.classList.toggle('on', navSections[i] === id);
+      });
+    }, 100);
+  }
+  function setActive(el) {
+    document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
+    el.classList.add('on');
+  }
+  function tab(id, btn) {
+    document.querySelectorAll('.ficha').forEach(f => f.classList.remove('on'));
+    document.querySelectorAll('.mt').forEach(b => b.classList.remove('on'));
+    document.getElementById(id).classList.add('on');
+    btn.classList.add('on');
+  }
+  function udots(trackId, dotsId) {
+    const tr = document.getElementById(trackId);
+    const dt = document.getElementById(dotsId);
+    if (!tr || !dt) return;
+    const idx = Math.round(tr.scrollLeft / tr.clientWidth);
+    dt.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === idx));
+  }
+  function gs(trackId, idx) {
+    const tr = document.getElementById(trackId);
+    if (tr) tr.scrollTo({ left: tr.clientWidth * idx, behavior: 'smooth' });
+  }
+  function gi(trackId, idx) {
+    const tr = document.getElementById(trackId);
+    if (!tr) return;
+    const cards = tr.querySelectorAll('.icard');
+    if (cards[idx]) tr.scrollTo({ left: cards[idx].offsetLeft - 20, behavior: 'smooth' });
+  }
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY + 60;
+    let current = navSections[0];
+    navSections.forEach(id => {
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (el && el.offsetTop <= scrollY) current = id;
+    });
+    document.querySelectorAll('.nb').forEach((b, i) => {
+      b.classList.toggle('on', navSections[i] === current);
+    });
+  });
+</script>
+</body>
+</html>
